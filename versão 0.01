@@ -1,0 +1,152 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
+
+package com.mycompany.jogo2;
+
+/**
+ *
+ * @author silva
+ */
+import java.util.Random;
+import java.util.Scanner;
+
+public class JogoTexte {
+
+    public static void main(String[] args) {
+        Menu menu = new Menu();
+        menu.iniciar();
+    }
+}
+
+class Menu {
+    private Scanner scanner;
+
+    public Menu() {
+        scanner = new Scanner(System.in);
+    }
+
+    public void iniciar() {
+        int escolha;
+
+        do {
+            System.out.println("Menu:");
+            System.out.println("1. Jogar");
+            System.out.println("2. História");
+            System.out.println("3. Sair");
+            System.out.print("Escolha uma opção: ");
+
+            escolha = scanner.nextInt();
+
+            switch (escolha) {
+                case 1:
+                    jogar();
+                    break;
+                case 2:
+                    mostrarHistoria();
+                    break;
+                case 3:
+                    System.out.println("Saindo do jogo. Até a próxima!");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
+            }
+        } while (escolha != 3);
+    }
+
+    private void jogar() {
+        Personagem personagem = criarPersonagem();
+        System.out.println("Você está jogando com o personagem:");
+       
+        
+        // Coloque aqui a lógica do seu jogo
+    }
+
+    private void mostrarHistoria() {
+        System.out.println("Esta é a história do jogo.");
+        // Coloque aqui a história do seu jogo
+    }
+
+    private Personagem criarPersonagem() {
+    System.out.print("Digite o nome do seu personagem: ");
+    String nome = scanner.next();
+
+    System.out.print("Digite a força do seu personagem: ");
+    int forca = scanner.nextInt();
+
+    System.out.print("Digite a constituição do seu personagem: ");
+    int constituicao = scanner.nextInt();
+
+    System.out.print("Digite a agilidade do seu personagem: ");
+    int agilidade = scanner.nextInt();
+
+    System.out.print("Digite a destreza do seu personagem: ");
+    int destreza = scanner.nextInt();
+
+return new Personagem(nome, forca, constituicao, agilidade, destreza);
+
+}
+
+}
+
+class Personagem {
+    private String nome;
+    private int pontosDeVida;
+    private int forca;
+    private int constituicao;
+    private int agilidade;
+    private int destreza;
+    private char arma;
+    private char armadura;
+    
+ public Personagem(String nome, int forca, int constituicao, int agilidade, int destreza) {
+    this.nome = nome;
+    this.pontosDeVida = calcularPontosDeVida();
+    this.forca = forca;
+    this.constituicao = constituicao;
+    this.agilidade = agilidade;
+    this.destreza = destreza;
+}
+
+
+    // Cálculo dos pontos de vida
+   private int calcularPontosDeVida() {
+    Random random = new Random();
+    int d6_1 = random.nextInt(6) + 1;
+    int d6_2 = random.nextInt(6) + 1;
+    int d6_3 = random.nextInt(6) + 1;
+    return d6_1 + d6_2 + d6_3 + (2 * constituicao);
+}
+
+    // Getters e setters para os atributos
+
+    public String getNome() {
+        return nome;
+    }
+
+    public int getPontosDeVida() {
+        return pontosDeVida;
+    }
+
+    public int getForca() {
+        return forca;
+    }
+
+    public int getConstituicao() {
+        return constituicao;
+    }
+
+    public int getAgilidade() {
+        return agilidade;
+    }
+
+    public int getDestreza() {
+        return destreza;
+    }
+
+
+}
+
+
+
