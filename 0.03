@@ -1,0 +1,246 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class Jogo4 {
+
+    public static void main(String[] args) {
+        Menu menu = new Menu();
+        menu.iniciar();
+    }
+}
+
+class Menu {
+    private final Scanner scanner;
+    private final Random random;
+
+    public Menu() {
+        scanner = new Scanner(System.in);
+        random = new Random();
+    }
+
+    public void iniciar() {
+        int escolha;
+
+        do {
+            exibirOpcoesMenu();
+            escolha = scanner.nextInt();
+
+            switch (escolha) {
+                case 1:
+                    jogar();
+                    break;
+                case 2:
+                    mostrarHistoria();
+                    break;
+                case 3:
+                    System.out.println("Saindo do jogo. Até a próxima!");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
+            }
+        } while (escolha != 3);
+    }
+
+    private void exibirOpcoesMenu() {
+        System.out.println("Menu:");
+        System.out.println("1. Jogar");
+        System.out.println("2. História");
+        System.out.println("3. Sair");
+        System.out.print("Escolha uma opção: ");
+    }
+
+    private void jogar() {
+        Personagem personagem = criarPersonagem();
+        System.out.println("Você está jogando com o personagem: " + personagem.getNome());
+
+
+        // Coloque aqui a lógica do seu jogo
+    }
+
+    private void mostrarHistoria() {
+        System.out.println("\n            Esta é a história do jogo.\n");
+        System.out.println("Em um tranquilo bairro de Belém,um jovem paraense vive uma vida \n comum até o dia em que descobre que possui habilidades mágicas");
+        System.out.println(" Sua vida muda drasticamente quando é convidado para se matricular \n na misteriosa Escola de Magia da Ilha Místic situada em uma ilha");
+        System.out.println("dentre arquipelogo de Belém .\n\n Entretanto, a paz da ilha é abalada quando ela é atacada por uma\n horda de terríveis criaturas,todas elas personagens das lendas");
+        System.out.println(" urbanas mais aterrorizantes do Brasil.O campus da escola se transforma");
+        System.out.println("em um labirinto sombrio, onde monstros rondam cada corredor e sala de aula.");
+        System.out.println("O protagonista e seus novosamigos mágicos se veem encurralados, incapazes de \n ");
+        System.out.println("escapar da ilha.No entanto, há uma única saída que permanece desbloqueada, mas para");
+        System.out.println("alcançá-la,eles devem enfrentar o desafio mais assustador de suas vidas.\n A saída é guardada por um terrível chefão,uma criatura lendária ");
+        System.out.println("que personifica o medo que as histórias urbanas do Brasil inspiram.");
+        System.out.println("A jornada do protagonista e seus amigos é uma busca pela coragem,\n determinação e confiança em suas habilidades\n mágicas recém-descobertas.\n");
+        System.out.println(" Eles deverão lutar contra as próprias lendas que assombraram suas \n infâncias, superando os monstros que emergem das sombras, e finalmente \n enfrentar o temível chefão para escapar da ilha e salvar a escola");
+        System.out.println("Esta é uma aventura emocionante, repleta de referências à rica mitologia ");
+        System.out.println("brasileira, que mergulha os jogadores em um mundo onde o folclore se \n torna realidade, e a coragem do protagonista é posta à prova em uma\n batalha épica pela sobrevivência e liberdade.\n");
+
+    }
+
+   private Personagem criarPersonagem() {
+    System.out.print("Digite o nome do seu personagem: ");
+    String nome = scanner.next();
+
+    int pontosDisponiveis = 15;
+    int forca = 0, constituicao = 0, agilidade = 0, destreza = 0;
+
+    while (pontosDisponiveis > 0) {
+        System.out.println("Pontos disponíveis para distribuir: " + pontosDisponiveis);
+        
+        System.out.print("Distribua pontos em Força (max 10 pontos): ");
+        int pontosForca = scanner.nextInt();
+        if (pontosForca <= 10 && pontosForca <= pontosDisponiveis) {
+            forca = pontosForca;
+            pontosDisponiveis -= pontosForca;
+        } else {
+            System.out.println("Pontuação inválida. Tente novamente.");
+            continue;
+        }
+        
+        System.out.print("Distribua pontos em Constituição (max 10 pontos): ");
+        int pontosConstituicao = scanner.nextInt();
+        if (pontosConstituicao <= 10 && pontosConstituicao <= pontosDisponiveis) {
+            constituicao = pontosConstituicao;
+            pontosDisponiveis -= pontosConstituicao;
+        } else {
+            System.out.println("Pontuação inválida. Tente novamente.");
+            continue;
+        }
+        
+        System.out.print("Distribua pontos em Agilidade (max 10 pontos): ");
+        int pontosAgilidade = scanner.nextInt();
+        if (pontosAgilidade <= 10 && pontosAgilidade <= pontosDisponiveis) {
+            agilidade = pontosAgilidade;
+            pontosDisponiveis -= pontosAgilidade;
+        } else {
+            System.out.println("Pontuação inválida. Tente novamente.");
+            continue;
+        }
+        
+        System.out.print("Distribua pontos em Destreza (max 10 pontos): ");
+        int pontosDestreza = scanner.nextInt();
+        if (pontosDestreza <= 10 && pontosDestreza <= pontosDisponiveis) {
+            destreza = pontosDestreza;
+            pontosDisponiveis -= pontosDestreza;
+        } else {
+            System.out.println("Pontuação inválida. Tente novamente.");
+            continue;
+        }
+
+        break; // Sai do loop se a distribuição de pontos for válida
+    }
+
+   char arma, armadura;
+        do {
+            System.out.print("Escolha uma arma (P - Pesada, L - Leve): ");
+            arma = scanner.next().charAt(0);
+        } while (arma != 'P' && arma != 'L');
+
+        do {
+            System.out.print("Escolha uma armadura (A - Pesada, L - Leve): ");
+            armadura = scanner.next().charAt(0);
+        } while (armadura != 'A' && armadura != 'L');
+
+        return new Personagem(nome, forca, constituicao, agilidade, destreza, arma, armadura);
+}
+
+class Personagem {
+    private String nome;
+    private int pontosDeVida;
+    private int forca;
+    private int constituicao;
+    private int agilidade;
+    private int destreza;
+    private char arma;
+    private char armadura;
+
+    private static final int PONTOS_DE_VIDA_BASE = 6;
+
+    public Personagem(String nome, int forca, int constituicao, int agilidade, int destreza, char arma, char armadura) {
+        this.nome = nome;
+        this.forca = forca;
+        this.constituicao = constituicao;
+        this.agilidade = agilidade;
+        this.destreza = destreza;
+        this.arma = arma;
+        this.armadura = armadura;
+        this.pontosDeVida = calcularPontosDeVida();
+    }
+
+    private int calcularPontosDeVida() {
+        Random random = new Random();
+        int somaDados = random.nextInt(6) + 1 + random.nextInt(6) + 1 + random.nextInt(6) + 1;
+        return somaDados + (2 * constituicao) + PONTOS_DE_VIDA_BASE;
+    }
+
+    public int calcularDano() {
+        Random random = new Random();
+        int constanteDano = random.nextInt(6) + 1;
+
+        if (arma == 'P') {
+            return constanteDano + random.nextInt(12) + (int) (1.5 * forca);
+        } else {
+            return constanteDano + random.nextInt(6) + random.nextInt(6) + random.nextInt(4) + destreza;
+        }
+    }
+
+    public void combate(Inimigo inimigo) {
+        System.out.println("Começa o combate entre " + nome + " e " + inimigo.getNome() + "!");
+        
+        if (agilidade >= inimigo.getAgilidade()) {
+            combateRodada(this, inimigo);
+        } else {
+            combateRodada(inimigo, this);
+        }
+    }
+
+    private void combateRodada(Personagem atacante, Personagem defensor) {
+        int dano = atacante.calcularDano();
+        System.out.println(atacante.getNome() + " ataca " + defensor.getNome() + " causando " + dano + " de dano.");
+
+        defensor.pontosDeVida -= dano;
+        
+        if (defensor.pontosDeVida <= 0) {
+            System.out.println(defensor.getNome() + " foi derrotado!");
+        }
+    }
+
+    public String getNome() {
+        return nome;
+    }
+}
+
+class Inimigo {
+    private String nome;
+    private int pontosDeVida;
+    private int forca;
+    private int agilidade;
+
+    public Inimigo(String nome, int forca, int agilidade) {
+        this.nome = nome;
+        this.forca = forca;
+        this.agilidade = agilidade;
+        this.pontosDeVida = calcularPontosDeVida();
+    }
+
+    public int getAgilidade() {
+        return agilidade;
+    }
+
+    private int calcularPontosDeVida() {
+        Random random = new Random();
+        int somaDados = random.nextInt(6) + 1 + random.nextInt(6) + 1 + random.nextInt(6) + 1;
+        return somaDados;
+    }
+
+    public int calcularDano() {
+        Random random = new Random();
+        int constanteDano = random.nextInt(6) + 1;
+        return constanteDano + random.nextInt(6) + forca;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+}
+}
+
