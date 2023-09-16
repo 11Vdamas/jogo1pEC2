@@ -1,0 +1,325 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class Jogo4 {
+
+   
+    public static void main(String[] args) {
+        Menu menu = new Menu();
+        menu.iniciar();
+    }
+}
+
+class Menu {
+    private final Scanner scanner;
+    private final Random random;
+
+    public Menu() {
+        scanner = new Scanner(System.in);
+        random = new Random();
+    }
+
+    public void iniciar() {
+        int escolha;
+
+        do {
+            exibirOpcoesMenu();
+            escolha = scanner.nextInt();
+
+            switch (escolha) {
+                case 1:
+                    jogar();
+                    break;
+                case 2:
+                    mostrarHistoria();
+                    break;
+                case 3:
+                    System.out.println("Saindo do jogo. Até a próxima!");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
+            }
+        } while (escolha != 3);
+    }
+
+    private void exibirOpcoesMenu() {
+        System.out.println("Menu:");
+        System.out.println("1. Jogar");
+        System.out.println("2. História");
+        System.out.println("3. Sair");
+        System.out.print("Escolha uma opção: ");
+    }
+
+    private void jogar() {
+    Personagem personagem = criarPersonagem();
+    System.out.println("Você está jogando com o personagem: " + personagem.getNome());
+
+ 
+}
+
+    private void mostrarHistoria() {
+        System.out.println("/,--.----------------------------------------------------------------------------------------------,\\");
+        System.out.println("|   /,--.                                                                                           |");
+        System.out.println("|  /      `--,                                                                                      |");
+        System.out.println("| |       _,--`.                                                                                ,-  |");
+        System.out.println("|  \\,---'      `--'--,_,--,_,--,_,-'--'--,_,--,_,--,_,-`--'--,_,--,_,- _,--,_,--,_,--,_,-`-        |");
+        System.out.println("|                                                                                                   |");
+        System.out.println("|    Em um tranquilo bairro de Belém, um jovem paraense vive uma vida comum tomando seu açaí de boa,|");
+        System.out.println("| até que descobre que possui habilidades mágicas. Sua vida muda drasticamente quando é convidado   |");
+        System.out.println("| para se matricular na misteriosa Escola de Magia da Ilha Mística situada em uma ilha no           |");
+        System.out.println("| arquipélago de Belém.                                                                             |");
+        System.out.println("|                                                                                                   |");
+        System.out.println("| Entretanto, a paz da ilha é abalada quando ela é atacada por uma horda de terríveis               |");
+        System.out.println("| criaturas, todas elas personagens das lendas urbanas do Brasil. O campus                          |");
+        System.out.println("| da escola se transforma em um labirinto sombrio, onde monstros rondam cada corredor e sala        |");
+        System.out.println("| de aula. O protagonista e seus novos amigos mágicos se veem encurralados, incapazes de            |");
+        System.out.println("|  escapar da ilha. No entanto, há uma única saída que permanece desbloqueada, mas para alcançá-la, |");
+        System.out.println("| eles devem enfrentar o desafio mais assustador de suas vidas. A saída é guardada por um           |");
+        System.out.println("| terrível chefão, uma criatura lendária que personifica o medo que as histórias urbanas do         |");
+        System.out.println("| Brasil inspiram.                                                                                  |");
+        System.out.println("|                                                                                                   |");
+        System.out.println("| A jornada do protagonista e seus amigos é uma busca pela coragem, determinação e confiança        |");
+        System.out.println("| em suas habilidades mágicas recém-descobertas. Eles deverão lutar contra as próprias lendas       |");
+        System.out.println("| que assombraram suas infâncias, superando os monstros que emergem das sombras, e finalmente       |");
+        System.out.println("| enfrentar o temível chefão para escapar da ilha e salvar a escola. 2Esta é uma aventura           |");
+        System.out.println("| emocionante, repleta de referências à rica mitologia brasileira, que mergulha os jogadores        |");
+        System.out.println("| em um mundo onde o folclore se torna realidade, e a coragem do protagonista é posta à prova       |");
+        System.out.println("| em uma batalha épica pela sobrevivência e liberdade.                                              |");                 
+        System.out.println("|                                                                                                   |");
+        System.out.println("'--,_,--,_,--,_,-'--'--,_,--,_,--,_,-`--'--,_,--,_,- ,--,'--,_,`--'--,__,---,_,--,_,--,_,-`--,_,--,_|");
+    
+    }
+
+   private Personagem criarPersonagem() {
+    System.out.print("Digite o nome do seu personagem: ");
+    String nome = scanner.next();
+
+    int pontosDisponiveis = 15;
+    int forca = 0, constituicao = 0, agilidade = 0, destreza = 0;
+
+    while (pontosDisponiveis > 0) {
+        System.out.println("Pontos disponíveis para distribuir: " + pontosDisponiveis);
+        
+        System.out.print("Distribua pontos em Força (max 10 pontos): ");
+        int pontosForca = scanner.nextInt();
+        if (pontosForca <= 10 && pontosForca <= pontosDisponiveis) {
+            forca = pontosForca;
+            pontosDisponiveis -= pontosForca;
+        } else {
+            System.out.println("Pontuação inválida. Tente novamente.");
+            continue;
+        }
+        
+        System.out.print("Distribua pontos em Defesa (max 10 pontos): ");
+        int pontosConstituicao = scanner.nextInt();
+        if (pontosConstituicao <= 10 && pontosConstituicao <= pontosDisponiveis) {
+            constituicao = pontosConstituicao;
+            pontosDisponiveis -= pontosConstituicao;
+        } else {
+            System.out.println("Pontuação inválida. Tente novamente.");
+            continue;
+        }
+        
+        System.out.print("Distribua pontos em Agilidade (max 10 pontos): ");
+        int pontosAgilidade = scanner.nextInt();
+        if (pontosAgilidade <= 10 && pontosAgilidade <= pontosDisponiveis) {
+            agilidade = pontosAgilidade;
+            pontosDisponiveis -= pontosAgilidade;
+        } else {
+            System.out.println("Pontuação inválida. Tente novamente.");
+            continue;
+        }
+        
+        System.out.print("Distribua pontos em Destreza (max 10 pontos): ");
+        int pontosDestreza = scanner.nextInt();
+        if (pontosDestreza <= 10 && pontosDestreza <= pontosDisponiveis) {
+            destreza = pontosDestreza;
+            pontosDisponiveis -= pontosDestreza;
+        } else {
+            System.out.println("Pontuação inválida. Tente novamente.");
+            continue;
+        }
+
+        break; // Sai do loop se a distribuição de pontos for válida
+    }
+
+   char arma, armadura;
+        do {
+            System.out.print("Escolha uma arma (p - Pesada, l - Leve): ");
+            arma = scanner.next().charAt(0);
+        } while (arma != 'p' && arma != 'l');
+
+        do {
+            System.out.print("Escolha uma armadura (p - Pesada, l - Leve): ");
+            armadura = scanner.next().charAt(0);
+        } while (armadura != 'p' && armadura != 'l');
+
+        return new Personagem(nome, forca, constituicao, agilidade, destreza, arma, armadura);
+}
+
+  private Inimigo inimigoAleatorio(Personagem personagem, int nivel) {
+    int escolhaInimigo = random.nextInt(6); // Escolhe entre os 6 tipos de inimigos
+
+    Inimigo inimigo;
+
+    switch (escolhaInimigo) {
+        case 0:
+            inimigo = new MulaSemCabeca();
+            break;
+        case 1:
+            inimigo = new SaciPerere();
+            break;
+        case 2:
+            inimigo = new Curupira();
+            break;
+        case 3:
+            inimigo = new Boitata();
+            break;
+        case 4:
+            inimigo = new Iara();
+            break;
+        case 5:
+            inimigo = new Boto();
+            break;
+        default:
+            inimigo = new Inimigo("Inimigo Genérico", 20, 10, 10, 10); // Valores genéricos
+    }
+
+    // Ajuste os atributos do inimigo com base no nível do jogador (opcional)
+    // Exemplo: inimigo.aumentarNivel(nivel);
+
+    return inimigo;
+}
+
+
+}
+
+class Personagem {
+    private String nome;
+    private int pontosDeVida;
+    private int forca;
+    private int constituicao;
+    private int agilidade;
+    private int destreza;
+    private char arma;
+    private char armadura;
+
+    private static final int PONTOS_DE_VIDA_BASE = 6;
+
+    public Personagem(String nome, int forca, int constituicao, int agilidade, int destreza, char arma, char armadura) {
+        this.nome = nome;
+        this.forca = forca;
+        this.constituicao = constituicao;
+        this.agilidade = agilidade;
+        this.destreza = destreza;
+        this.arma = arma;
+        this.armadura = armadura;
+        this.pontosDeVida = calcularPontosDeVida();
+    }
+
+    private int calcularPontosDeVida() {
+        Random random = new Random();
+        int somaDados = random.nextInt(6) + 1 + random.nextInt(6) + 1 + random.nextInt(6) + 1;
+        return somaDados + (2 * constituicao) + PONTOS_DE_VIDA_BASE;
+    }
+    
+
+    public int calcularDano() {
+    Random random = new Random();
+    int constanteDano = random.nextInt(6) + 1;
+
+    if (arma == 'P') {
+        return constanteDano + random.nextInt(12) + (int) (1.5 * forca);
+    } else {
+        return constanteDano + random.nextInt(6) + random.nextInt(6) + random.nextInt(4) + destreza;
+    }
+}
+public int atacar() {
+    int dano = calcularDano(); // Use o método que você já tem para calcular o dano.
+    System.out.println("Você ataca e causa " + dano + " pontos de dano!");
+    return dano;
+}
+
+   
+
+    public String getNome() {
+        return nome;
+    }
+}
+
+class Inimigo {
+    private String nome;
+    private int pontosDeVida;
+    private int dano;
+    private int defesa;
+    private int agilidade;
+
+    public Inimigo(String nome, int pontosDeVida, int dano, int defesa, int agilidade) {
+        this.nome = nome;
+        this.pontosDeVida = pontosDeVida;
+        this.dano = dano;
+        this.defesa = defesa;
+        this.agilidade = agilidade;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public int getPontosDeVida() {
+        return pontosDeVida;
+    }
+public int atacar() {
+    int dano = calcularDano(); // Use o método que você já tem para calcular o dano.
+    System.out.println(getNome() + " ataca e causa " + dano + " pontos de dano!");
+    return dano;
+}
+    public int calcularDano() {
+        Random random = new Random();
+        return random.nextInt(8) + 1 + dano;
+    }
+
+    public int getDefesa() {
+        return defesa;
+    }
+
+    public int getAgilidade() {
+        return agilidade;
+    }
+}
+
+class MulaSemCabeca extends Inimigo {
+    public MulaSemCabeca() {
+        super("Mula Sem Cabeça", 30, 15, 10, 8);
+    }
+}
+
+class SaciPerere extends Inimigo {
+    public SaciPerere() {
+        super("Saci-Pererê", 20, 10, 8, 15);
+    }
+}
+class Curupira extends Inimigo {
+    public Curupira() {
+        super("Curupira", 25, 12, 10, 18); // Nome, Pontos de Vida, Dano, Defesa, Agilidade
+    }
+}
+
+class Boitata extends Inimigo {
+    public Boitata() {
+        super("Boitatá", 35, 15, 20, 5); // Nome, Pontos de Vida, Dano, Defesa, Agilidade
+    }
+}
+
+class Iara extends Inimigo {
+    public Iara() {
+        super("Iara", 28, 10, 18, 12); // Nome, Pontos de Vida, Dano, Defesa, Agilidade
+    }
+}
+
+class Boto extends Inimigo {
+    public Boto() {
+        super("Boto", 26, 12, 15, 20); // Nome, Pontos de Vida, Dano, Defesa, Agilidade
+    }
+}
