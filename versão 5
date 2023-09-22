@@ -1,0 +1,442 @@
+
+import java.util.Random;
+import java.util.Scanner;
+import java.util.InputMismatchException;
+
+public class Mavenproject2 {
+
+    public static void main(String[] args) {
+        Menu menu = new Menu();
+        menu.iniciar();
+    }
+}
+
+class Menu {
+
+    private final Scanner scanner;
+    private final Random random;
+    private Personagem personagem;
+
+    public Menu() {
+        scanner = new Scanner(System.in);
+        random = new Random();
+    }
+
+    public void iniciar() {
+        int escolha;
+
+        do {
+            exibirOpcoesMenu();
+            escolha = lerInteiro();
+
+            switch (escolha) {
+                case 1:
+                    personagem = criarPersonagem();
+                    jogar();
+                    break;
+                case 2:
+                    mostrarHistoria();
+                    break;
+                case 3:
+                    System.out.println("Saindo do jogo. Até a próxima!");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
+            }
+        } while (escolha != 3);
+    }
+
+    private void exibirOpcoesMenu() {
+        System.out.println("Menu:");
+        System.out.println("1. Jogar");
+        System.out.println("2. História");
+        System.out.println("3. Sair");
+        System.out.print("Escolha uma opção: ");
+    }
+
+    private void exibirResultadoBatalha(Personagem jogador, Inimigo inimigo, int danoJogador, int danoInimigo) {
+        System.out.println("Você ataca e causa " + danoJogador + " pontos de dano em " + inimigo.getNome() + ".");
+        System.out.println(inimigo.getNome() + " ataca e causa " + danoInimigo + " pontos de dano em você.");
+        System.out.println("Status do " + jogador.getNome() + ": Pontos de Vida = " + jogador.getPontosDeVida());
+        System.out.println("Status do " + inimigo.getNome() + ": Pontos de Vida = " + inimigo.getPontosDeVida());
+    }
+
+    private void jogar() {
+        if (personagem == null) {
+            System.out.println("Crie um personagem antes de jogar.");
+            return;
+        }
+
+        Inimigo inimigo = inimigoAleatorio(personagem, 1);
+        int rodada = 1;
+        int pocoesRestantes = 3;
+
+        System.out.println("Batalha contra " + inimigo.getNome() + "!");
+        System.out.println("Você está jogando com o personagem: " + personagem.getNome());
+
+        int escolhaAcao;
+
+        while (personagem.getPontosDeVida() > 0 && inimigo.getPontosDeVida() > 0) {
+            System.out.println("\n--- Rodada " + rodada + " ---");
+            exibirOpcoesAcao();
+
+            try {
+                escolhaAcao = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Digite um número válido.");
+                scanner.next();
+                continue;
+            }
+
+            switch (escolhaAcao) {
+                case 1:
+                    int danoDoJogador = personagem.atacar();
+                    int danoRecebido = inimigo.atacar();
+                    int danoInfligido = danoDoJogador - inimigo.getDefesa();
+                    int danoSofrido = danoRecebido - personagem.getArmadura();
+
+                    personagem.setPontosDeVida(personagem.getPontosDeVida() - danoSofrido);
+                    inimigo.setPontosDeVida(inimigo.getPontosDeVida() - danoInfligido);
+
+                    exibirResultadoBatalha(personagem, inimigo, danoInfligido, danoSofrido);
+                    break;
+                case 2:
+                    personagem.dobrarDefesa();
+                    System.out.println("Você dobrou sua defesa neste turno.");
+                    break;
+                case 3:
+                    if (pocoesRestantes > 0) {
+                        int cura = usarPocao();
+                        personagem.setPontosDeVida(personagem.getPontosDeVida() + cura);
+                        pocoesRestantes--;
+
+                        System.out.println("Você se curou em " + cura + " pontos de vida.");
+                    } else {
+                        System.out.println("Você não tem mais poções disponíveis.");
+                    }
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
+            }
+
+            if (inimigo.getPontosDeVida() <= 0) {
+                System.out.println("Você venceu a batalha contra " + inimigo.getNome() + "!");
+                break; // Sai do loop, pois o inimigo está derrotado
+            } else if (personagem.getPontosDeVida() <= 0) {
+                System.out.println("Você foi derrotado por " + inimigo.getNome() + ". Game over!");
+                break; // Sai do loop, pois o jogador está derrotado
+            }
+
+        }
+        rodada++;
+    }
+
+    private void exibirOpcoesAcao() {
+        System.out.println("Ações disponíveis:");
+        System.out.println("1. Atacar");
+        System.out.println("2. Defender");
+        System.out.println("3. Usar Poção");
+        System.out.print("Escolha uma ação: ");
+    }
+
+    private int usarPocao() {
+        int cura = random.nextInt(6) + 1 + random.nextInt(6) + 1 + random.nextInt(6) + 1;
+        return cura;
+    }
+
+    private void mostrarHistoria() {
+        System.out.println("/,--.----------------------------------------------------------------------------------------------,\\");
+        System.out.println("|   /,--.                                                                                           |");
+        System.out.println("|  /      `--,                                                                                      |");
+        System.out.println("| |       _,--`.                                                                                ,-  |");
+        System.out.println("|  \\,---'      `--'--,_,--,_,--,_,-'--'--,_,--,_,--,_,-`--'--,_,--,_,- ,--,,--,_,--,_,-`-        |");
+        System.out.println("|                                                                                                   |");
+        System.out.println("|    Em um tranquilo bairro de Belém, um jovem paraense vive uma vida comum tomando seu açaí de boa,|");
+        System.out.println("| até que descobre que possui habilidades mágicas. Sua vida muda drasticamente quando é convidado   |");
+        System.out.println("| para se matricular na misteriosa Escola de Magia da Ilha Mística situada em uma ilha no           |");
+        System.out.println("| arquipélago de Belém.                                                                             |");
+        System.out.println("|                                                                                                   |");
+        System.out.println("| Entretanto, a paz da ilha é abalada quando ela é atacada por uma horda de terríveis               |");
+        System.out.println("| criaturas, todas elas personagens das lendas urbanas do Brasil. O campus                          |");
+        System.out.println("| da escola se transforma em um labirinto sombrio, onde monstros rondam cada corredor e sala        |");
+        System.out.println("| de aula. O protagonista e seus novos amigos mágicos se veem encurralados, incapazes de            |");
+        System.out.println("|  escapar da ilha. No entanto, há uma única saída que permanece desbloqueada, mas para alcançá-la, |");
+        System.out.println("| eles devem enfrentar o desafio mais assustador de suas vidas. A saída é guardada por um           |");
+        System.out.println("| terrível chefão, uma criatura lendária que personifica o medo que as histórias urbanas do         |");
+        System.out.println("| Brasil inspiram.                                                                                  |");
+        System.out.println("|                                                                                                   |");
+        System.out.println("| A jornada do protagonista e seus amigos é uma busca pela coragem, determinação e confiança        |");
+        System.out.println("| em suas habilidades mágicas recém-descobertas. Eles deverão lutar contra as próprias lendas       |");
+        System.out.println("| que assombraram suas infâncias, superando os monstros que emergem das sombras, e finalmente       |");
+        System.out.println("| enfrentar o temível chefão para escapar da ilha e salvar a escola. 2Esta é uma aventura           |");
+        System.out.println("| emocionante, repleta de referências à rica mitologia brasileira, que mergulha os jogadores        |");
+        System.out.println("| em um mundo onde o folclore se torna realidade, e a coragem do protagonista é posta à prova       |");
+        System.out.println("| em uma batalha épica pela sobrevivência e liberdade.                                              |");
+        System.out.println("|                                                                                                   |");
+        System.out.println("'--,_,--,_,--,_,-'--'--,_,--,_,--,_,-`--'--,_,--,_,- ,--,'--,_,`--'--,__,---,_,--,_,--,_,-`--,_,--,_|");
+
+    }
+
+    private Personagem criarPersonagem() {
+        System.out.print("Digite o nome do seu personagem: ");
+        String nome = scanner.next();
+
+        int pontosDisponiveis = 15;
+        int forca = 0, defesa = 0, agilidade = 0, destreza = 0;
+
+        while (pontosDisponiveis > 0) {
+            System.out.println("Pontos disponíveis para distribuir: " + pontosDisponiveis);
+
+            System.out.print("Distribua pontos em Força (max 10 pontos): ");
+            int pontosForca = scanner.nextInt();
+            if (pontosForca <= 10 && pontosForca <= pontosDisponiveis) {
+                forca = pontosForca;
+                pontosDisponiveis -= pontosForca;
+            } else {
+                System.out.println("Pontuação inválida. Tente novamente.");
+                continue;
+            }
+
+            System.out.print("Distribua pontos em Defesa (max 10 pontos): ");
+            int pontosConstituicao = scanner.nextInt();
+            if (pontosConstituicao <= 10 && pontosConstituicao <= pontosDisponiveis) {
+                defesa = pontosConstituicao;
+                pontosDisponiveis -= pontosConstituicao;
+            } else {
+                System.out.println("Pontuação inválida. Tente novamente.");
+                continue;
+            }
+
+            System.out.print("Distribua pontos em Agilidade (max 10 pontos): ");
+            int pontosAgilidade = scanner.nextInt();
+            if (pontosAgilidade <= 10 && pontosAgilidade <= pontosDisponiveis) {
+                agilidade = pontosAgilidade;
+                pontosDisponiveis -= pontosAgilidade;
+            } else {
+                System.out.println("Pontuação inválida. Tente novamente.");
+                continue;
+            }
+
+            System.out.print("Distribua pontos em Destreza (max 10 pontos): ");
+            int pontosDestreza = scanner.nextInt();
+            if (pontosDestreza <= 10 && pontosDestreza <= pontosDisponiveis) {
+                destreza = pontosDestreza;
+                pontosDisponiveis -= pontosDestreza;
+            } else {
+                System.out.println("Pontuação inválida. Tente novamente.");
+                continue;
+            }
+
+            break; // Sai do loop se a distribuição de pontos for válida
+        }
+
+        char arma, armadura;
+        do {
+            System.out.print("Escolha uma arma (P - Pesada, L - Leve): ");
+            arma = scanner.next().charAt(0);
+            arma = Character.toUpperCase(arma); // Converte para maiúsculas para consistência
+        } while (arma != 'P' && arma != 'L');
+
+        do {
+            System.out.print("Escolha uma armadura (P - Pesada, L - Leve): ");
+            armadura = scanner.next().charAt(0);
+            armadura = Character.toUpperCase(armadura); // Converte para maiúsculas para consistência
+        } while (armadura != 'P' && armadura != 'L');
+
+        return new Personagem(nome, forca, defesa, agilidade, destreza, arma, armadura);
+    }
+
+    private Inimigo inimigoAleatorio(Personagem personagem, int nivel) {
+        int escolhaInimigo = random.nextInt(6); // Escolhe entre os 6 tipos de inimigos
+
+        Inimigo inimigo;
+
+        switch (escolhaInimigo) {
+            case 0:
+                inimigo = new MulaSemCabeca();
+                break;
+            case 1:
+                inimigo = new SaciPerere();
+                break;
+            // Adicione casos para outros tipos de inimigos...
+            default:
+                inimigo = new Inimigo("Inimigo Genérico", 20, 10, 10, 10); // Valores genéricos
+        }
+
+        return inimigo;
+    }
+
+    class Personagem {
+
+        private String nome;
+        private int pontosDeVida;
+        private int forca;
+        private int defesa;
+        private int agilidade;
+        private int destreza;
+        private char arma;
+        private char armadura;
+
+        private static final int PONTOS_DE_VIDA_BASE = 6;
+
+        public Personagem(String nome, int forca, int constituicao, int agilidade, int destreza, char arma, char armadura) {
+            this.nome = nome;
+            this.forca = forca;
+            this.defesa = constituicao;
+            this.agilidade = agilidade;
+            this.destreza = destreza;
+            this.arma = arma;
+            this.armadura = armadura;
+            this.pontosDeVida = calcularPontosDeVida();
+        }
+
+        private int calcularPontosDeVida() {
+            Random random = new Random();
+            int somaDados = random.nextInt(6) + 1 + random.nextInt(6) + 1 + random.nextInt(6) + 1;
+            return somaDados + (2 * defesa) + PONTOS_DE_VIDA_BASE;
+        }
+
+        public int calcularDano() {
+            Random random = new Random();
+            int constanteDano = random.nextInt(6) + 1;
+
+            if (arma == 'P') {
+                return constanteDano + random.nextInt(12) + (int) (1.5 * forca);
+            } else {
+                return constanteDano + random.nextInt(6) + random.nextInt(6) + random.nextInt(4) + destreza;
+            }
+        }
+
+        public int getPontosDeVida() {
+            return pontosDeVida;
+        }
+
+        public void setPontosDeVida(int pontosDeVida) {
+            this.pontosDeVida = pontosDeVida;
+        }
+
+        public int atacar() {
+            int dano = calcularDano(); // Use o método que você já tem para calcular o dano.
+            System.out.println("Você ataca e causa " + dano + " pontos de dano!");
+            return dano;
+        }
+
+        public void dobrarDefesa() {
+            // Double the player's defense for one round
+            int defesa = 0;
+            defesa = defesa * 2;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        private int getArmadura() {
+            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        }
+    }
+
+    class Inimigo {
+
+        private String nome;
+        private int pontosDeVida;
+        private int dano;
+        private int defesa;
+        private int agilidade;
+
+        public Inimigo(String nome, int pontosDeVida, int dano, int defesa, int agilidade) {
+            this.nome = nome;
+            this.pontosDeVida = pontosDeVida;
+            this.dano = dano;
+            this.defesa = defesa;
+            this.agilidade = agilidade;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public int getPontosDeVida() {
+            return pontosDeVida;
+        }
+
+        public int atacar() {
+            int dano = calcularDano(); // Use o método que você já tem para calcular o dano.
+            System.out.println(getNome() + " ataca e causa " + dano + " pontos de dano!");
+            return dano;
+        }
+
+        public int calcularDano() {
+            Random random = new Random();
+            return random.nextInt(8) + 1 + dano;
+        }
+
+        public int getDefesa() {
+            return defesa;
+        }
+
+        public int getAgilidade() {
+            return agilidade;
+        }
+
+        private void setPontosDeVida(int i) {
+            throw new UnsupportedOperationException("Not supported yet."); 
+        }
+    }
+
+    class MulaSemCabeca extends Inimigo {
+
+        public MulaSemCabeca() {
+            super("Mula Sem Cabeça", 30, 15, 10, 8);
+        }
+    }
+
+    class SaciPerere extends Inimigo {
+
+        public SaciPerere() {
+            super("Saci-Pererê", 20, 10, 8, 15);
+        }
+    }
+
+    class Curupira extends Inimigo {
+
+        public Curupira() {
+            super("Curupira", 25, 12, 10, 18); // Nome, Pontos de Vida, Dano, Defesa, Agilidade
+        }
+    }
+
+    class Boitata extends Inimigo {
+
+        public Boitata() {
+            super("Boitatá", 35, 15, 20, 5); // Nome, Pontos de Vida, Dano, Defesa, Agilidade
+        }
+    }
+
+    class Iara extends Inimigo {
+
+        public Iara() {
+            super("Iara", 28, 10, 18, 12); // Nome, Pontos de Vida, Dano, Defesa, Agilidade
+        }
+    }
+
+    class Boto extends Inimigo {
+
+        public Boto() {
+            super("Boto", 26, 12, 15, 20); // Nome, Pontos de Vida, Dano, Defesa, Agilidade
+        }
+
+    }
+
+    private int lerInteiro() {
+        try {
+            return scanner.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Entrada inválida. Digite um número válido.");
+            scanner.next();
+            return lerInteiro(); // Recursivamente tente novamente
+        }
+    }
+
+}
